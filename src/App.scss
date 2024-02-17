@@ -1,0 +1,20 @@
+@import "./constants/paddings";
+
+.container {
+	margin: 0 auto;
+	padding: 0 $mobilePadding;
+
+	@media screen and (min-width: $maxMobile) {
+		max-width: $maxMobile;
+	}
+
+	@media screen and (min-width: $tablet) {
+		max-width: $tablet;
+		padding: 0 $tabletPadding;
+	}
+
+	@media screen and (min-width: $desktop) {
+		max-width: $desktop;
+		padding: 0 $desktopPadding;
+	}
+}
