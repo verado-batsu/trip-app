@@ -1,0 +1,41 @@
+.searchTrip {
+	padding: 10px 0;
+}
+
+.searchTitle {
+	margin-bottom: 40px;
+
+	font-size: 28px;
+	line-height: 1;
+}
+
+.searchBoldTitle {
+	font-weight: 700;
+}
+
+.searchLabel {
+	display: block;
+	position: relative;
+}
+
+.searchInput {
+	padding: 10px 15px 10px 40px;
+
+	font-size: 18px;
+	font-weight: 500;
+
+	border-radius: 5px;
+	background-color: #efefef;
+	color: #000;
+}
+
+.searchInput::placeholder {
+	color: #000;
+	font-weight: 500;
+}
+
+.searchIcon {
+	position: absolute;
+	top: 12px;
+	left: 10px;
+}

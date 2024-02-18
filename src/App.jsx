@@ -1,15 +1,13 @@
 import './App.scss';
 
-import { SearchTrip } from 'components/SearchTrip/SearchTrip';
-import { ListOfTrip } from 'components/ListOfTrip/ListOfTrip';
-import { WeeklyForecast } from 'components/WeeklyForecast/WeeklyForecast';
+import { ForecastSection } from 'components/ForecastSection/ForecastSection';
 
 function App() {
     return (
         <>
-            <SearchTrip />
-            <ListOfTrip />
-            <WeeklyForecast />
+            <main>
+                <ForecastSection />
+            </main>
         </>
     );
 }
