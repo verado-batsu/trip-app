@@ -1,0 +1,73 @@
+.listOfTripSection {
+	padding: 10px 0;
+	display: flex;
+}
+
+.sliderWrapper {
+	display: flex;
+	gap: 10px;
+}
+
+.sliderOfTrips {
+	width: 808px;
+	height: 256px;
+	border: 2px solid black;
+
+	overflow: hidden;
+}
+
+.sliderLine {
+	position: relative;
+	left: 0;
+	display: flex;
+	height: 256px;
+
+	transition: left ease 0.2s;
+}
+
+.slide {
+	min-width: 256px;
+	height: 256px;
+
+	background-color: red;
+
+	&:not(:nth-child(3n)) {
+		margin-right: 20px;
+	}
+}
+
+.slideCityImg {
+}
+
+.slideDescrWrapper {
+}
+
+.slideCityName {
+}
+
+.slideTripDate {
+}
+
+.prevSlideBtn {
+	cursor: pointer;
+
+	&:disabled {
+		cursor: default;
+	}
+}
+
+.prevIcon {
+	fill: currentColor;
+}
+
+.nextSlideBtn {
+	cursor: pointer;
+
+	&:disabled {
+		cursor: default;
+	}
+}
+
+.nextIcon {
+	fill: currentColor;
+}
