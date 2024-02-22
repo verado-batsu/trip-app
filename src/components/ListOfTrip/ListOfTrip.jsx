@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 
 import { tripsData } from 'data/tripsData';
 
-import { API_KEY } from 'constants/apiKey';
+import { AddTripBtn } from 'components/AddTripBtn/AddTripBtn';
 
 import styles from './ListOfTrip.module.scss';
-import axios from 'axios';
 import { LeftIcon, RightIcon } from 'assets/images/list-of-trip/icons';
+import { Modal } from 'components/Modal/Modal';
 const {
     listOfTripSection,
     sliderWrapper,
@@ -26,6 +26,8 @@ const {
 export function ListOfTrip() {
     const [listOfTrip, setListOfTrip] = useState(tripsData);
     const [offset, setOffset] = useState(0);
+    const [showModal, setShowModal] = useState(false);
+
     const sliderLineRef = useRef();
 
     // axios
@@ -49,6 +51,14 @@ export function ListOfTrip() {
         sliderLineRef.current.style.left = -offset + 'px';
     }, [listOfTrip.length, offset]);
 
+    function openModal() {
+        setShowModal(true);
+    }
+
+    function closeModal() {
+        setShowModal(false);
+    }
+
     function handleBtnNextClick(e) {
         setOffset(prev => prev + 808);
     }
@@ -59,6 +69,7 @@ export function ListOfTrip() {
 
     return (
         <section className={listOfTripSection}>
+            {showModal && <Modal closeModal={closeModal} />}
             <div className={sliderWrapper}>
                 <button
                     className={prevSlideBtn}
@@ -97,11 +108,7 @@ export function ListOfTrip() {
                     <RightIcon className={nextIcon} />
                 </button>
             </div>
-            <div>
-                <button type="button">
-                    <span>Add trip</span>
-                </button>
-            </div>
+            <AddTripBtn openModal={openModal} />
         </section>
     );
 }
