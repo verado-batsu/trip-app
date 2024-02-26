@@ -42,11 +42,11 @@ export function ListOfTrip() {
     //     });
 
     useEffect(() => {
-        if (offset > Math.floor((listOfTrip.length - 1) / 3) * 808) {
+        if (offset > Math.floor((listOfTrip.length - 1) / 3) * 888) {
             setOffset(0);
         }
         if (offset < 0) {
-            setOffset(Math.floor((listOfTrip.length - 1) / 3) * 808);
+            setOffset(Math.floor((listOfTrip.length - 1) / 3) * 888);
         }
         sliderLineRef.current.style.left = -offset + 'px';
     }, [listOfTrip.length, offset]);
@@ -60,16 +60,26 @@ export function ListOfTrip() {
     }
 
     function handleBtnNextClick(e) {
-        setOffset(prev => prev + 808);
+        setOffset(prev => prev + 888);
     }
 
     function handleBtnPrevClick(e) {
-        setOffset(prev => prev - 808);
+        setOffset(prev => prev - 888);
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        console.log('city-', formData.get('city'));
+        console.log('startDate-', formData.get('startDate'));
+        console.log('endDate-', formData.get('endDate'));
     }
 
     return (
         <section className={listOfTripSection}>
-            {showModal && <Modal closeModal={closeModal} />}
+            {showModal && (
+                <Modal closeModal={closeModal} handleSubmit={handleSubmit} />
+            )}
             <div className={sliderWrapper}>
                 <button
                     className={prevSlideBtn}

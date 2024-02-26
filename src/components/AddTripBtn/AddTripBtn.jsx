@@ -1,9 +1,13 @@
+import { AddIcon } from 'assets/images/AddTripBtn/icons';
+
+import styles from './AddTripBtn.module.scss';
+const { addTripBtn, addTripBtnIcon, addTripBtnText } = styles;
+
 export function AddTripBtn({ openModal }) {
     return (
-        <div>
-            <button type="button" onClick={openModal}>
-                <span>Add trip</span>
-            </button>
-        </div>
+        <button className={addTripBtn} type="button" onClick={openModal}>
+            <AddIcon className={addTripBtnIcon} />
+            <span className={addTripBtnText}>Add trip</span>
+        </button>
     );
 }

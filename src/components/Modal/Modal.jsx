@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { config } from 'constants/config';
+import { countryApiConfig } from 'constants/countryApiConfig';
 import { CrossIcon } from 'assets/images/modal/icons';
 
 import styles from './Modal.module.scss';
@@ -25,12 +25,15 @@ const {
     saveBtn,
 } = styles;
 
-export function Modal({ closeModal }) {
+export function Modal({ closeModal, handleSubmit }) {
     const [countries, setCountries] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState('');
     const [states, setStates] = useState([]);
     const [selectedState, setSelectedState] = useState('');
     const [cities, setCities] = useState([]);
+    const [selectedCity, setSelectedCity] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     useEffect(() => {
         getCountries();
@@ -45,9 +48,9 @@ export function Modal({ closeModal }) {
             try {
                 const { data } = await axios({
                     method: 'get',
-                    url: `${config.countryUrl}/${selectedCountry}/states`,
+                    url: `${countryApiConfig.countryUrl}/${selectedCountry}/states`,
                     headers: {
-                        'X-CSCAPI-KEY': config.API_KEY,
+                        'X-CSCAPI-KEY': countryApiConfig.API_KEY,
                     },
                 });
 
@@ -69,9 +72,9 @@ export function Modal({ closeModal }) {
             try {
                 const { data } = await axios({
                     method: 'get',
-                    url: `${config.countryUrl}/${selectedCountry}/states/${selectedState}/cities`,
+                    url: `${countryApiConfig.countryUrl}/${selectedCountry}/states/${selectedState}/cities`,
                     headers: {
-                        'X-CSCAPI-KEY': config.API_KEY,
+                        'X-CSCAPI-KEY': countryApiConfig.API_KEY,
                     },
                 });
 
@@ -88,9 +91,9 @@ export function Modal({ closeModal }) {
         try {
             const { data } = await axios({
                 method: 'get',
-                url: config.countryUrl,
+                url: countryApiConfig.countryUrl,
                 headers: {
-                    'X-CSCAPI-KEY': config.API_KEY,
+                    'X-CSCAPI-KEY': countryApiConfig.API_KEY,
                 },
             });
 
@@ -99,16 +102,6 @@ export function Modal({ closeModal }) {
             console.log(error);
         }
     }
-
-    function handleCountyChange(e) {
-        setSelectedCountry(e.target.value);
-    }
-
-    function handleStateChange(e) {
-        setSelectedState(e.target.value);
-    }
-
-    console.log(cities);
 
     const ModalElement = (
         <>
@@ -124,7 +117,7 @@ export function Modal({ closeModal }) {
                     </button>
                 </div>
                 <div className={modalBody}>
-                    <form className={modalForm}>
+                    <form className={modalForm} onSubmit={handleSubmit}>
                         <label className={formLabel}>
                             <span className={labelTitle}>
                                 <span className={required}>*</span>Country
@@ -133,7 +126,9 @@ export function Modal({ closeModal }) {
                                 className={formSelect}
                                 name="country"
                                 defaultValue="Please select a country"
-                                onChange={handleCountyChange}
+                                onChange={e =>
+                                    setSelectedCountry(e.target.value)
+                                }
                             >
                                 <option value="Please select a country">
                                     Please select a country
@@ -156,7 +151,7 @@ export function Modal({ closeModal }) {
                                 className={formSelect}
                                 name="state"
                                 defaultValue="Please select a state"
-                                onChange={handleStateChange}
+                                onChange={e => setSelectedState(e.target.value)}
                             >
                                 <option value="Please select a state">
                                     Please select a state
@@ -176,10 +171,16 @@ export function Modal({ closeModal }) {
                                 className={formSelect}
                                 name="city"
                                 defaultValue="Please select a city"
+                                onChange={e => setSelectedCity(e.target.value)}
                             >
                                 <option value="Please select a city">
                                     Please select a city
                                 </option>
+                                {cities.map(city => (
+                                    <option key={city.id} value={city.name}>
+                                        {city.name}
+                                    </option>
+                                ))}
                             </select>
                         </label>
                         <label className={formLabel}>
@@ -190,6 +191,9 @@ export function Modal({ closeModal }) {
                                 className={formInput}
                                 name="startDate"
                                 placeholder="Select date"
+                                type="date"
+                                onChange={e => setStartDate(e.target.value)}
+                                value={startDate}
                             />
                         </label>
                         <label className={formLabel}>
@@ -200,6 +204,9 @@ export function Modal({ closeModal }) {
                                 className={formInput}
                                 name="endDate"
                                 placeholder="Select date"
+                                type="date"
+                                onChange={e => setEndDate(e.target.value)}
+                                value={endDate}
                             />
                         </label>
                     </form>
@@ -212,7 +219,7 @@ export function Modal({ closeModal }) {
                     >
                         Cancel
                     </button>
-                    <button className={saveBtn} type="button">
+                    <button className={saveBtn} type="submit">
                         Save
                     </button>
                 </div>
