@@ -51,14 +51,15 @@
 	fill: currentColor;
 }
 
-.modalBody {
-	padding: 20px 0;
-}
-
 .modalForm {
 }
 
+.formBody {
+	padding: 20px 0;
+}
+
 .formLabel {
+	position: relative;
 	display: block;
 	&:not(:last-child) {
 		margin-bottom: 14px;
@@ -97,6 +98,38 @@
 
 	border: 1px solid #e1e1e1;
 	border-radius: 4px;
+}
+
+.backdropList {
+	position: absolute;
+	left: 0;
+	top: 100%;
+	display: block;
+	width: 100%;
+	height: 320px;
+
+	background-color: #fff;
+	box-shadow: 0 6px 10px 0.001px;
+
+	overflow: auto;
+	z-index: 20;
+}
+
+.backdropItem {
+}
+
+.backdropBtn {
+	display: block;
+	padding: 10px 10px;
+	width: 100%;
+
+	text-align: start;
+	transition: background-color 0.2s ease;
+
+	&:hover,
+	&:focus {
+		background-color: #b1b1b1;
+	}
 }
 
 .modalFooter {

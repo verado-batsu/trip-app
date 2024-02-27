@@ -13,13 +13,16 @@ const {
     modalTitle,
     closeBtn,
     closeIcon,
-    modalBody,
+    formBody,
     modalForm,
     formLabel,
     labelTitle,
     required,
     formSelect,
     formInput,
+    backdropList,
+    backdropItem,
+    backdropBtn,
     modalFooter,
     cancelBtn,
     saveBtn,
@@ -116,13 +119,45 @@ export function Modal({ closeModal, handleSubmit }) {
                         <CrossIcon className={closeIcon} />
                     </button>
                 </div>
-                <div className={modalBody}>
-                    <form className={modalForm} onSubmit={handleSubmit}>
+
+                <form className={modalForm} onSubmit={handleSubmit}>
+                    <div className={formBody}>
                         <label className={formLabel}>
                             <span className={labelTitle}>
                                 <span className={required}>*</span>Country
                             </span>
-                            <select
+                            <input
+                                className={formInput}
+                                type="text"
+                                name="country"
+                                placeholder="Please select a country"
+                                onChange={e =>
+                                    setSelectedCountry(e.target.value)
+                                }
+                                value={selectedCountry}
+                            />
+                            {selectedCountry && (
+                                <ul className={backdropList}>
+                                    {/* <li className={backdropItem}>
+                                        Please select a country
+                                    </li> */}
+                                    {countries.map(country => (
+                                        <li
+                                            className={backdropItem}
+                                            key={country.id}
+                                        >
+                                            <button
+                                                className={backdropBtn}
+                                                type="button"
+                                                value={country.iso2}
+                                            >
+                                                {country.name}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                            {/* <select
                                 className={formSelect}
                                 name="country"
                                 defaultValue="Please select a country"
@@ -141,7 +176,7 @@ export function Modal({ closeModal, handleSubmit }) {
                                         {country.name}
                                     </option>
                                 ))}
-                            </select>
+                            </select> */}
                         </label>
                         <label className={formLabel}>
                             <span className={labelTitle}>
@@ -172,6 +207,7 @@ export function Modal({ closeModal, handleSubmit }) {
                                 name="city"
                                 defaultValue="Please select a city"
                                 onChange={e => setSelectedCity(e.target.value)}
+                                value={selectedCity}
                             >
                                 <option value="Please select a city">
                                     Please select a city
@@ -209,20 +245,20 @@ export function Modal({ closeModal, handleSubmit }) {
                                 value={endDate}
                             />
                         </label>
-                    </form>
-                </div>
-                <div className={modalFooter}>
-                    <button
-                        className={cancelBtn}
-                        type="button"
-                        onClick={closeModal}
-                    >
-                        Cancel
-                    </button>
-                    <button className={saveBtn} type="submit">
-                        Save
-                    </button>
-                </div>
+                    </div>
+                    <div className={modalFooter}>
+                        <button
+                            className={cancelBtn}
+                            type="button"
+                            onClick={closeModal}
+                        >
+                            Cancel
+                        </button>
+                        <button className={saveBtn} type="submit">
+                            Save
+                        </button>
+                    </div>
+                </form>
             </div>
             <div className={modalWrapper} onClick={closeModal}></div>
         </>

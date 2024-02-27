@@ -68,11 +68,12 @@ export function ListOfTrip() {
     }
 
     function handleSubmit(e) {
+        console.log('submit');
         e.preventDefault();
-        const formData = new FormData(e.target);
-        console.log('city-', formData.get('city'));
-        console.log('startDate-', formData.get('startDate'));
-        console.log('endDate-', formData.get('endDate'));
+        const { city, startDate, endDate } = e.target;
+        console.log('city-', city.value);
+        console.log('startDate-', startDate.value);
+        console.log('endDate-', endDate.value);
     }
 
     return (
