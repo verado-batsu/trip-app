@@ -30,11 +30,29 @@ const {
 
 export function Modal({ closeModal, handleSubmit }) {
     const [countries, setCountries] = useState([]);
-    const [selectedCountry, setSelectedCountry] = useState('');
+    const [filteredCountries, setFilteredCountries] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState({
+        name: '',
+        iso2: '',
+    });
+    const [inputCountryIsFocused, setInputCountryIsFocused] = useState(false);
+    const [focusedSelectionListOfCountry, setFocusedSelectionListOfCountry] =
+        useState(false);
     const [states, setStates] = useState([]);
-    const [selectedState, setSelectedState] = useState('');
+    const [filteredStates, setFilteredStates] = useState([]);
+    const [selectedState, setSelectedState] = useState({
+        name: '',
+        iso2: '',
+    });
+    const [inputStateIsFocused, setInputStateIsFocused] = useState(false);
+    const [focusedSelectionListOfState, setFocusedSelectionListOfState] =
+        useState(false);
     const [cities, setCities] = useState([]);
+    const [filteredCities, setFilteredCities] = useState([]);
     const [selectedCity, setSelectedCity] = useState('');
+    const [inputCityIsFocused, setInputCityIsFocused] = useState(false);
+    const [focusedSelectionListOfCity, setFocusedSelectionListOfCity] =
+        useState(false);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
@@ -43,15 +61,29 @@ export function Modal({ closeModal, handleSubmit }) {
     }, []);
 
     useEffect(() => {
-        if (selectedCountry === '') {
-            return;
+        function filterCountries() {
+            setFilteredCountries([]);
+
+            if (selectedCountry.name.trim() === '') {
+                setFilteredCountries(countries);
+            } else {
+                countries.forEach(country => {
+                    if (
+                        country.name
+                            .substr(0, selectedCountry.name.length)
+                            .toLowerCase() === selectedCountry.name
+                    ) {
+                        setFilteredCountries(prev => [...prev, country]);
+                    }
+                });
+            }
         }
 
         async function getStates() {
             try {
                 const { data } = await axios({
                     method: 'get',
-                    url: `${countryApiConfig.countryUrl}/${selectedCountry}/states`,
+                    url: `${countryApiConfig.countryUrl}/${selectedCountry.iso2}/states`,
                     headers: {
                         'X-CSCAPI-KEY': countryApiConfig.API_KEY,
                     },
@@ -63,19 +95,36 @@ export function Modal({ closeModal, handleSubmit }) {
             }
         }
 
-        getStates();
-    }, [selectedCountry]);
+        filterCountries();
+        if (selectedCountry.iso2 !== '' && selectedCountry.iso2 !== undefined) {
+            getStates();
+        }
+    }, [countries, selectedCountry]);
 
     useEffect(() => {
-        if (selectedState === '') {
-            return;
+        function filterState() {
+            setFilteredStates([]);
+
+            if (selectedState.name.trim() === '') {
+                setFilteredStates(states);
+            } else {
+                states.forEach(state => {
+                    if (
+                        state.name
+                            .substr(0, selectedState.name.length)
+                            .toLowerCase() === selectedState.name
+                    ) {
+                        setFilteredStates(prev => [...prev, state]);
+                    }
+                });
+            }
         }
 
         async function getCities() {
             try {
                 const { data } = await axios({
                     method: 'get',
-                    url: `${countryApiConfig.countryUrl}/${selectedCountry}/states/${selectedState}/cities`,
+                    url: `${countryApiConfig.countryUrl}/${selectedCountry.iso2}/states/${selectedState.iso2}/cities`,
                     headers: {
                         'X-CSCAPI-KEY': countryApiConfig.API_KEY,
                     },
@@ -87,8 +136,32 @@ export function Modal({ closeModal, handleSubmit }) {
             }
         }
 
-        getCities();
-    }, [selectedCountry, selectedState]);
+        filterState();
+        if (selectedState.iso2 !== '' && selectedState.iso2 !== undefined) {
+            getCities();
+        }
+    }, [selectedCountry, selectedState.iso2, selectedState.name, states]);
+
+    useEffect(() => {
+        function filterCities() {
+            setFilteredCities([]);
+
+            if (selectedCity.trim() === '') {
+                setFilteredCities(cities);
+            } else {
+                cities.forEach(city => {
+                    if (
+                        city.name
+                            .substr(0, selectedCity.length)
+                            .toLowerCase() === selectedCity
+                    ) {
+                        setFilteredCities(prev => [...prev, city]);
+                    }
+                });
+            }
+        }
+        filterCities();
+    }, [cities, selectedCity]);
 
     async function getCountries() {
         try {
@@ -103,6 +176,24 @@ export function Modal({ closeModal, handleSubmit }) {
             setCountries(data);
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    function handleBlurCountry() {
+        if (!focusedSelectionListOfCountry) {
+            setInputCountryIsFocused(false);
+        }
+    }
+
+    function handleBlurState() {
+        if (!focusedSelectionListOfState) {
+            setInputStateIsFocused(false);
+        }
+    }
+
+    function handleBlurCity() {
+        if (!focusedSelectionListOfCity) {
+            setInputCityIsFocused(false);
         }
     }
 
@@ -132,16 +223,23 @@ export function Modal({ closeModal, handleSubmit }) {
                                 name="country"
                                 placeholder="Please select a country"
                                 onChange={e =>
-                                    setSelectedCountry(e.target.value)
+                                    setSelectedCountry({ name: e.target.value })
                                 }
-                                value={selectedCountry}
+                                onFocus={e => setInputCountryIsFocused(true)}
+                                onBlur={handleBlurCountry}
+                                value={selectedCountry.name}
                             />
-                            {selectedCountry && (
-                                <ul className={backdropList}>
-                                    {/* <li className={backdropItem}>
-                                        Please select a country
-                                    </li> */}
-                                    {countries.map(country => (
+                            {inputCountryIsFocused && (
+                                <ul
+                                    className={backdropList}
+                                    onMouseEnter={e =>
+                                        setFocusedSelectionListOfCountry(true)
+                                    }
+                                    onMouseLeave={e =>
+                                        setFocusedSelectionListOfCountry(false)
+                                    }
+                                >
+                                    {filteredCountries.map(country => (
                                         <li
                                             className={backdropItem}
                                             key={country.id}
@@ -149,7 +247,9 @@ export function Modal({ closeModal, handleSubmit }) {
                                             <button
                                                 className={backdropBtn}
                                                 type="button"
-                                                value={country.iso2}
+                                                onClick={e =>
+                                                    setSelectedCountry(country)
+                                                }
                                             >
                                                 {country.name}
                                             </button>
@@ -157,67 +257,96 @@ export function Modal({ closeModal, handleSubmit }) {
                                     ))}
                                 </ul>
                             )}
-                            {/* <select
-                                className={formSelect}
-                                name="country"
-                                defaultValue="Please select a country"
-                                onChange={e =>
-                                    setSelectedCountry(e.target.value)
-                                }
-                            >
-                                <option value="Please select a country">
-                                    Please select a country
-                                </option>
-                                {countries.map(country => (
-                                    <option
-                                        key={country.id}
-                                        value={country.iso2}
-                                    >
-                                        {country.name}
-                                    </option>
-                                ))}
-                            </select> */}
                         </label>
                         <label className={formLabel}>
                             <span className={labelTitle}>
                                 <span className={required}>*</span>State
                             </span>
-                            <select
-                                className={formSelect}
+                            <input
+                                disabled={!selectedCountry.iso2}
+                                className={formInput}
+                                type="text"
                                 name="state"
-                                defaultValue="Please select a state"
-                                onChange={e => setSelectedState(e.target.value)}
-                            >
-                                <option value="Please select a state">
-                                    Please select a state
-                                </option>
-                                {states.map(state => (
-                                    <option key={state.id} value={state.iso2}>
-                                        {state.name}
-                                    </option>
-                                ))}
-                            </select>
+                                placeholder="Please select a state"
+                                onChange={e =>
+                                    setSelectedState({ name: e.target.value })
+                                }
+                                onFocus={e => setInputStateIsFocused(true)}
+                                onBlur={handleBlurState}
+                                value={selectedState.name}
+                            />
+                            {inputStateIsFocused && (
+                                <ul
+                                    className={backdropList}
+                                    onMouseEnter={e =>
+                                        setFocusedSelectionListOfState(true)
+                                    }
+                                    onMouseLeave={e =>
+                                        setFocusedSelectionListOfState(false)
+                                    }
+                                >
+                                    {filteredStates.map(state => (
+                                        <li
+                                            className={backdropItem}
+                                            key={state.id}
+                                        >
+                                            <button
+                                                className={backdropBtn}
+                                                type="button"
+                                                onClick={e =>
+                                                    setSelectedState(state)
+                                                }
+                                            >
+                                                {state.name}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </label>
                         <label className={formLabel}>
                             <span className={labelTitle}>
                                 <span className={required}>*</span>City
                             </span>
-                            <select
-                                className={formSelect}
+                            <input
+                                disabled={!selectedState.iso2}
+                                className={formInput}
+                                type="text"
                                 name="city"
-                                defaultValue="Please select a city"
+                                placeholder="Please select a city"
                                 onChange={e => setSelectedCity(e.target.value)}
+                                onFocus={e => setInputCityIsFocused(true)}
+                                onBlur={handleBlurCity}
                                 value={selectedCity}
-                            >
-                                <option value="Please select a city">
-                                    Please select a city
-                                </option>
-                                {cities.map(city => (
-                                    <option key={city.id} value={city.name}>
-                                        {city.name}
-                                    </option>
-                                ))}
-                            </select>
+                            />
+                            {inputCityIsFocused && (
+                                <ul
+                                    className={backdropList}
+                                    onMouseEnter={e =>
+                                        setFocusedSelectionListOfCity(true)
+                                    }
+                                    onMouseLeave={e =>
+                                        setFocusedSelectionListOfCity(false)
+                                    }
+                                >
+                                    {filteredCities.map(city => (
+                                        <li
+                                            className={backdropItem}
+                                            key={city.id}
+                                        >
+                                            <button
+                                                className={backdropBtn}
+                                                type="button"
+                                                onClick={e =>
+                                                    setSelectedCity(city.name)
+                                                }
+                                            >
+                                                {city.name}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </label>
                         <label className={formLabel}>
                             <span className={labelTitle}>
