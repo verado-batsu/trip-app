@@ -18,7 +18,6 @@ const {
     formLabel,
     labelTitle,
     required,
-    formSelect,
     formInput,
     backdropList,
     backdropItem,
@@ -218,6 +217,7 @@ export function Modal({ closeModal, handleSubmit }) {
                                 <span className={required}>*</span>Country
                             </span>
                             <input
+                                autoComplete="off"
                                 className={formInput}
                                 type="text"
                                 name="country"
@@ -263,7 +263,10 @@ export function Modal({ closeModal, handleSubmit }) {
                                 <span className={required}>*</span>State
                             </span>
                             <input
-                                disabled={!selectedCountry.iso2}
+                                autoComplete="off"
+                                disabled={
+                                    !selectedCountry.iso2 || states.length === 0
+                                }
                                 className={formInput}
                                 type="text"
                                 name="state"
@@ -309,7 +312,10 @@ export function Modal({ closeModal, handleSubmit }) {
                                 <span className={required}>*</span>City
                             </span>
                             <input
-                                disabled={!selectedState.iso2}
+                                autoComplete="off"
+                                disabled={
+                                    !selectedState.iso2 || cities.length === 0
+                                }
                                 className={formInput}
                                 type="text"
                                 name="city"

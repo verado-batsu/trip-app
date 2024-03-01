@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 import { tripsData } from 'data/tripsData';
 
@@ -68,12 +69,27 @@ export function ListOfTrip() {
     }
 
     function handleSubmit(e) {
-        console.log('submit');
         e.preventDefault();
-        const { city, startDate, endDate } = e.target;
+        const { country, state, city, startDate, endDate } = e.target;
+        const arrayOfValues = [
+            country.value,
+            state.value,
+            city.value,
+            startDate.value,
+            endDate.value,
+        ];
+        for (const value of arrayOfValues) {
+            if (value.trim() === '') {
+                Notify.failure('All fields must be completed');
+                return;
+            }
+        }
+
         console.log('city-', city.value);
         console.log('startDate-', startDate.value);
         console.log('endDate-', endDate.value);
+
+        closeModal();
     }
 
     return (
