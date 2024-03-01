@@ -8,6 +8,8 @@ import { AddTripBtn } from 'components/AddTripBtn/AddTripBtn';
 import styles from './ListOfTrip.module.scss';
 import { LeftIcon, RightIcon } from 'assets/images/list-of-trip/icons';
 import { Modal } from 'components/Modal/Modal';
+import axios from 'axios';
+import { weatherApiConfig } from 'constants/weatherApiConfig';
 const {
     listOfTripSection,
     sliderWrapper,
@@ -30,17 +32,6 @@ export function ListOfTrip() {
     const [showModal, setShowModal] = useState(false);
 
     const sliderLineRef = useRef();
-
-    // axios
-    //     .get(
-    //         `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Berlin/today?unitGroup=metric&include=days&key=${API_KEY}&contentType=json`
-    //     )
-    //     .then(res => {
-    //         console.log(res.data);
-    //     })
-    //     .catch(error => {
-    //         console.log(error);
-    //     });
 
     useEffect(() => {
         if (offset > Math.floor((listOfTrip.length - 1) / 3) * 888) {
@@ -85,11 +76,24 @@ export function ListOfTrip() {
             }
         }
 
-        console.log('city-', city.value);
-        console.log('startDate-', startDate.value);
-        console.log('endDate-', endDate.value);
+        // console.log('city-', city.value);
+        // console.log('startDate-', startDate.value);
+        // console.log('endDate-', endDate.value);
 
+        getTripForecast(city.value, startDate.value, endDate.value);
         closeModal();
+    }
+
+    async function getTripForecast(city, date1, date2) {
+        try {
+            const { data } = await axios.get(
+                `${weatherApiConfig.urlStart}/${city}/${date1}/${date2}${weatherApiConfig.urlEnd}`
+            );
+            console.log('get forecast');
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (

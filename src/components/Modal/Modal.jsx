@@ -54,6 +54,8 @@ export function Modal({ closeModal, handleSubmit }) {
         useState(false);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [currentDate, setCurrentDate] = useState('');
+    const [maxDate, setMaxDate] = useState('');
 
     useEffect(() => {
         getCountries();
@@ -161,6 +163,28 @@ export function Modal({ closeModal, handleSubmit }) {
         }
         filterCities();
     }, [cities, selectedCity]);
+
+    useEffect(() => {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const currentDate = `${year}-${month}-${day}`;
+
+        const maxDateMiliseconds = date.getTime() + 15 * 24 * 60 * 60 * 1000;
+        const maxYear = new Date(maxDateMiliseconds).getFullYear();
+        const maxMonth = String(
+            new Date(maxDateMiliseconds).getMonth() + 1
+        ).padStart(2, '0');
+        const maxDay = String(new Date(maxDateMiliseconds).getDate()).padStart(
+            2,
+            '0'
+        );
+        const maxDate = `${maxYear}-${maxMonth}-${maxDay}`;
+
+        setCurrentDate(currentDate);
+        setMaxDate(maxDate);
+    }, []);
 
     async function getCountries() {
         try {
@@ -365,6 +389,8 @@ export function Modal({ closeModal, handleSubmit }) {
                                 type="date"
                                 onChange={e => setStartDate(e.target.value)}
                                 value={startDate}
+                                min={currentDate}
+                                max={maxDate}
                             />
                         </label>
                         <label className={formLabel}>
@@ -378,6 +404,8 @@ export function Modal({ closeModal, handleSubmit }) {
                                 type="date"
                                 onChange={e => setEndDate(e.target.value)}
                                 value={endDate}
+                                min={currentDate}
+                                max={maxDate}
                             />
                         </label>
                     </div>
