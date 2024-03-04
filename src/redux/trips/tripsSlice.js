@@ -1,35 +1,42 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { nanoid } from 'nanoid'
 
-const initialState = {
-	trips: [
-		{
-			id: nanoid(),
-			img: '',
-			cityName: 'Berlin',
-			startDate: '2023-07-14',
-			endDate: '2023-07-21',
-			forecast: [
-				{
-					datetime: '',
-					icon: '',
-					tempmax: '',
-					tempmin: ''
-				}
-			],
-			
-		},
-	],
-}
+import defaultImg from '../../assets/images/list-of-trip/default-img.jpg'
+
+const initialState = [
+	{
+		id: nanoid(),
+		img: defaultImg,
+		cityName: 'Berlin',
+		startDate: '2024-03-14',
+		endDate: '2024-03-14',
+		forecast: [
+			{
+				datetime: '2024-03-14',
+				icon: 'partly-cloudy-day',
+				tempmax: '6.4',
+				tempmin: '-1.3'
+			}
+		],
+	},
+]
 
 export const tripsSlice = createSlice({
 	name: 'trips',
 	initialState,
 	reducers: {
-
+		addTrip: (state, action) => {
+			return [
+				...state,
+				{
+					...action.payload,
+					id: nanoid(),
+				}
+			]
+		}
 	}
 })
 
-// export const { } = tripsSlice.action
+export const { addTrip } = tripsSlice.actions
 
 export default tripsSlice.reducer

@@ -1,4 +1,4 @@
-import { AddIcon } from 'assets/images/AddTripBtn/icons';
+import { AddIcon } from 'assets/images/add-trip-btn/icons';
 
 import styles from './AddTripBtn.module.scss';
 const { addTripBtn, addTripBtnIcon, addTripBtnText } = styles;

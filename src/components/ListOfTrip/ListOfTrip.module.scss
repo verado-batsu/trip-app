@@ -12,7 +12,7 @@
 .sliderOfTrips {
 	width: 888px;
 	height: 256px;
-	border: 2px solid black;
+	// border: 2px solid black;
 
 	overflow: hidden;
 }
@@ -30,20 +30,37 @@
 	min-width: 256px;
 	height: 256px;
 
-	background-color: red;
-
 	&:not(:nth-child(3n)) {
 		margin-right: 60px;
 	}
 }
 
+.slideBtn {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	text-align: start;
+}
+
+.slideCard {
+	height: 100%;
+}
+
 .slideCityImg {
+	width: 256px;
 }
 
 .slideDescrWrapper {
+	flex: 1;
+	width: 100%;
+	padding: 15px;
+
+	border: 1px solid #d1d1d1;
+	border-top: none;
 }
 
 .slideCityName {
+	margin-bottom: 10px;
 }
 
 .slideTripDate {
