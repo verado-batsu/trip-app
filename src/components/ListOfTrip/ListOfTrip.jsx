@@ -4,6 +4,8 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { addTrip } from '../../redux/trips/tripsSlice';
+import { changeSelectedId } from '../../redux/trips/selectedTripSlice';
+
 import { weatherApiConfig } from 'constants/weatherApiConfig';
 import { formatDate } from 'helpers';
 import defaultImg from '../../assets/images/list-of-trip/default-img.jpg';
@@ -121,6 +123,10 @@ export function ListOfTrip() {
         }
     }
 
+    function onTripClick(id) {
+        dispatch(changeSelectedId(id));
+    }
+
     return (
         <section className={listOfTripSection}>
             {showModal && (
@@ -138,7 +144,11 @@ export function ListOfTrip() {
                     <ul ref={sliderLineRef} className={sliderLine}>
                         {trips.map(trip => (
                             <li className={slide} key={trip.id}>
-                                <button className={slideBtn} type="button">
+                                <button
+                                    className={slideBtn}
+                                    type="button"
+                                    onClick={() => onTripClick(trip.id)}
+                                >
                                     <img
                                         className={slideCityImg}
                                         src={trip.img}

@@ -40,3 +40,5 @@ export const tripsSlice = createSlice({
 export const { addTrip } = tripsSlice.actions
 
 export default tripsSlice.reducer
+
+export const firstSelectedId = initialState[0].id

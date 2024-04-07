@@ -1,7 +1,7 @@
 import { CurrentDayForecast } from 'components/CurrentDayForecast/CurrentDayForecast';
 import { ListOfTrip } from 'components/ListOfTrip/ListOfTrip';
 import { SearchTrip } from 'components/SearchTrip/SearchTrip';
-import { WeeklyForecast } from 'components/WeeklyForecast/WeeklyForecast';
+import { FromToForecast } from 'components/FromToForecast/FromToForecast';
 
 import styles from './ForecastSection.module.scss';
 const { forecastSection, forecastSectionWrapper } = styles;
@@ -13,7 +13,7 @@ export function ForecastSection() {
                 <div>
                     <SearchTrip />
                     <ListOfTrip />
-                    <WeeklyForecast />
+                    <FromToForecast />
                 </div>
                 <CurrentDayForecast />
             </div>
