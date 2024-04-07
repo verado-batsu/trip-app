@@ -1,8 +1,12 @@
 import { useSelector } from 'react-redux';
 
 import styles from './FromToForecast.module.scss';
-const { fromToForecastSection, fromToForecastTitle, fromToForecastList } =
-    styles;
+const {
+    fromToForecastSection,
+    fromToForecastTitle,
+    fromToForecastList,
+    fromToForecastItem,
+} = styles;
 
 export function FromToForecast() {
     const trips = useSelector(state => state.trips);
@@ -15,11 +19,16 @@ export function FromToForecast() {
     return (
         <section className={fromToForecastSection}>
             <h2 className={fromToForecastTitle}>Week</h2>
-			<ul className={fromToForecastList}>{selectedTrip.forecast.map(forecast => {
-				<li className={}>
-
-				</li>
-			})}</ul>
+            <ul className={fromToForecastList}>
+                {selectedTrip.forecast.map(forecast => (
+                    <li key={forecast.datetime} className={fromToForecastItem}>
+                        <h3>{forecast.datetime}</h3>
+                        <p>
+                            {forecast.tempmax}&#176;/{forecast.tempmin}&#176;
+                        </p>
+                    </li>
+                ))}
+            </ul>
         </section>
     );
 }
