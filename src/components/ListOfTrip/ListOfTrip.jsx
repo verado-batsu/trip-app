@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,9 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addTrip } from '../../redux/trips/tripsSlice';
 import { changeSelectedId } from '../../redux/trips/selectedTripSlice';
 
-import { weatherApiConfig } from 'constants/weatherApiConfig';
 import { formatDate } from 'helpers';
-import defaultImg from '../../assets/images/list-of-trip/default-img.jpg';
+import { getTripForecast } from 'api';
 
 import { AddTripBtn } from 'components/AddTripBtn/AddTripBtn';
 import { Modal } from 'components/Modal/Modal';
@@ -92,35 +90,6 @@ export function ListOfTrip() {
         );
         dispatch(addTrip(trip));
         closeModal();
-    }
-
-    async function getTripForecast(city, date1, date2) {
-        try {
-            const { data } = await axios.get(
-                `${weatherApiConfig.urlStart}/${city}/${date1}/${date2}${weatherApiConfig.urlEnd}`
-            );
-
-            const forecast = data.days.map(
-                ({ datetime, icon, tempmax, tempmin }) => {
-                    return {
-                        datetime,
-                        icon,
-                        tempmax,
-                        tempmin,
-                    };
-                }
-            );
-
-            return {
-                img: defaultImg,
-                cityName: city,
-                startDate: date1,
-                endDate: date2,
-                forecast,
-            };
-        } catch (error) {
-            console.log(error);
-        }
     }
 
     function onTripClick(id) {
